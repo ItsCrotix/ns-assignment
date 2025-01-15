@@ -22,7 +22,7 @@
     ```
 
 ## Running the Project Locally
-To test and run various functions AWS Toolkit is advised. Please note that without deployment, only lambda functions can be deployed.
+To test and run various functions AWS Toolkit is advised. Please note that without deployment, only lambda functions can be tested.
 
 ### Lambda Functions
 - **checkOptimalRoute**:
