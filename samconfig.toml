@@ -1,0 +1,23 @@
+version = 0.1
+
+[default.build.parameters]
+template_file = "c:\\Users\\MMest\\Documents\\projecten\\NS\\template.yaml"
+cached = true
+parallel = true
+use_container = true
+
+[default.deploy.parameters]
+confirm_changeset = false
+stack_name = "NStack"
+resolve_s3 = true
+capabilities = [ "CAPABILITY_IAM", "CAPABILITY_NAMED_IAM" ]
+
+[default.global.parameters]
+stack_name = "NStack"
+region = "eu-west-3"
+
+[default.sync.parameters]
+template_file = "c:\\Users\\MMest\\Documents\\projecten\\NS\\template.yaml"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-kcnpqhpysjsa"
+dependency_layer = false
+watch = true
