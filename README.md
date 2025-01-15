@@ -41,6 +41,8 @@ To test and run various functions AWS Toolkit is advised. Please note that witho
 ### Testing the API Gateway
 To test the API Gateway, read the deployment section.
 
+---
+
 ## Deployment
 1. Build the project:
     ```sh
@@ -58,6 +60,37 @@ The following environment variables are used in this project:
 - `NSPRODUCTCACHE_TABLE_NAME`: The name of the product cache table.
 
 Make sure to set these variables in your environment or in a `.env` file before running the project.
+
+---
+
+## Demo
+To see the API in action, you can use the following endpoints:
+
+- **Check Optimal Route**:
+  - URL: `https://vbbem3zvb4.execute-api.eu-west-3.amazonaws.com/Prod/route`
+  - Query Parameters:
+    - `arrivalStation`: The station where you want to arrive.
+    - `departureStation`: The station from where you are departing.
+    - `departureDate`: The date and time of departure.
+
+  Example:
+  ```sh
+  curl "https://vbbem3zvb4.execute-api.eu-west-3.amazonaws.com/Prod/route?arrivalStation=Amsterdam&departureStation=Utrecht&departureDate=2025-01-16T08:00:00"
+  ```
+
+- **Sort Route By Comfort**:
+  - URL: `https://vbbem3zvb4.execute-api.eu-west-3.amazonaws.com/Prod/routes`
+  - Query Parameters:
+    - `arrivalStation`: The station where you want to arrive.
+    - `departureStation`: The station from where you are departing.
+    - `departureDate`: The date and time of departure.
+
+  Example:
+  ```sh
+  curl "https://vbbem3zvb4.execute-api.eu-west-3.amazonaws.com/Prod/routes?arrivalStation=Amsterdam&departureStation=Utrecht&departureDate=2025-01-16T08:00:00"
+  ```
+
+---
 
 ## Contributing
 Contributions are not currently being accepted for this project.
