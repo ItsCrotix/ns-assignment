@@ -10,11 +10,11 @@
 ### Installation
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/project-ns.git
+    git clone https://github.com/ItsCrotix/ns-assignment.git
     ```
 2. Navigate to the project directory:
     ```sh
-    cd project-ns
+    cd ns-assignment
     ```
 3. Install dependencies:
     ```sh
