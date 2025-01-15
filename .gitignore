@@ -1,0 +1,16 @@
+.aws-sam/
+.env
+.env.*
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+dist/
+build/
+.cache/
+node_modules/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,98 @@
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  checkOptimalRoute:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: checkOptimalRoute
+      CodeUri: dist/checkOptimalRoute
+      Handler: index.handler
+      Runtime: nodejs22.x
+      MemorySize: 128
+      Timeout: 30
+      Tracing: Active
+      Events:
+        ApiGETroute:
+          Type: Api
+          Properties:
+            Path: /route
+            Method: GET
+            RestApiId: !Ref Api
+  checkOptimalRouteLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${checkOptimalRoute}
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub
+        - ${ResourceName} From Stack ${AWS::StackName}
+        - ResourceName: Api
+      StageName: Prod
+      DefinitionBody:
+        openapi: '3.0'
+        info: {}
+        paths:
+          /routes:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${sortRouteByComfort.Arn}/invocations
+              responses: {}
+          /route:
+            get:
+              x-amazon-apigateway-integration:
+                httpMethod: POST
+                type: aws_proxy
+                uri: !Sub arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${checkOptimalRoute.Arn}/invocations
+              responses: {}
+      EndpointConfiguration: REGIONAL
+      TracingEnabled: true
+      Cors:
+        MaxAge: 5
+  sortRouteByComfort:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: sortRouteByComfort
+      CodeUri: dist/sortRouteByComfort
+      Handler: index.handler
+      Runtime: nodejs22.x
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Events:
+        ApiGETroutes:
+          Type: Api
+          Properties:
+            Path: /routes
+            Method: GET
+            RestApiId: !Ref Api
+      Environment:
+        Variables:
+          NSPRODUCTCACHE_TABLE_NAME: !Ref NSproductCache
+          NSPRODUCTCACHE_TABLE_ARN: !GetAtt NSproductCache.Arn
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref NSproductCache
+  sortRouteByComfortLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${sortRouteByComfort}
+  NSproductCache:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: productNumber
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: productNumber
+          KeyType: HASH
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
